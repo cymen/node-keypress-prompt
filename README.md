@@ -1,4 +1,4 @@
-# single-prompt [![Build Status](https://travis-ci.org/cymen/single-prompt.png?branch=master)](https://travis-ci.org/cymen/single-prompt)
+# single-prompt [![Build Status](https://travis-ci.org/cymen/node-single-prompt.png?branch=master)](https://travis-ci.org/cymen/node-single-prompt)
 
 [![NPM](https://nodei.co/npm/single-prompt.png?downloads=true&stars=true)](https://npmjs.org/package/single-prompt)
 
