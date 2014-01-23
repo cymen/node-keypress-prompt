@@ -37,7 +37,7 @@ made.
     Number of diners [1, 2, 3, 4, 5]: 2
     choice 2
 
-Note that internally `single-prompt` attempts to coerce the key to
+Note that internally `single-prompt` attempts to coerce the input to
 the type of the provided choices. If the match is an integer, it will
 return an integer so in this example, 2 is of type 'number'. It is
 assumed you won't do something silly like prompt with options like
