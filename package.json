@@ -2,7 +2,9 @@
     "name": "single-prompt",
     "description": "prompt for a single character or digit",
     "version": "0.0.1",
+    "main": "src/single-prompt.js",
     "dependencies": {
+        "keypress": "0.2.1",
         "q": "1.0.0"
     },
     "engines": {
@@ -12,7 +14,8 @@
         "grunt": "0.4.1",
         "grunt-contrib-jshint": "0.6.4",
         "grunt-jasmine-node": "0.1.0",
-        "grunt-jsbeautifier": "0.2.2"
+        "grunt-jsbeautifier": "0.2.2",
+        "proxyquire": "0.5.2"
     },
     "licenses": [{
         "type": "MIT",
