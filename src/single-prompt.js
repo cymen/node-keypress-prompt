@@ -11,9 +11,11 @@ module.exports = {
             keypress(process.stdin);
 
             process.stdin.on('keypress', function(key) {
-                var valid,
-                    keyAsInteger = parseInt(key, 10),
+                var keyAsInteger = parseInt(key, 10),
+                    valid,
                     value;
+
+                key = key.toLowerCase();
 
                 if (choices.indexOf(key) !== -1) {
                     valid = true;

@@ -4,7 +4,7 @@
 
 `single-prompt` is a simple prompter to get a single character or digit input
 from the user on the console. It repeats the prompt until a valid input is
-made.
+made. It automatically lowercases the answer to avoid any issue with case.
 
 ## Example of prompting for a character
 

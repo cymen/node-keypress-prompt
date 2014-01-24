@@ -79,4 +79,21 @@ describe('single-prompt', function() {
             }
         );
     });
+
+    it('lowercases the input to avoid issues with case', function(done) {
+        var promise = prompter.prompt('Yes or no', ['y', 'n']);
+
+        process.stdin.emit('keypress', 'N');
+
+        promise.then(
+            function(key) {
+                expect(key).toBe('n');
+                done();
+            },
+            function() {
+                expect('promise').toBe('not rejected');
+                done();
+            }
+        );
+    });
 });
