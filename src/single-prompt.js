@@ -72,9 +72,5 @@ module.exports = {
                 process.stdin.setRawMode(true);
             }
         });
-    },
-
-    fakeKeypress: function(key, keyMeta) {
-        process.stdin.emit('keypress', key, keyMeta);
     }
 };

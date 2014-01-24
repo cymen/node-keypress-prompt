@@ -1,6 +1,7 @@
 'use strict';
 
-var Q = require('q');
+var Q = require('q'),
+    fakeKeypress = require('../src/fake-keypress');
 
 describe('single-prompt', function() {
     var prompter;
@@ -15,7 +16,7 @@ describe('single-prompt', function() {
     it('displays the prompt on stdout', function(done) {
         var promise = prompter.prompt('this is a test', ['y', 'n']);
 
-        prompter.fakeKeypress('n');
+        fakeKeypress('n');
 
         promise.then(
             function(key) {
@@ -32,7 +33,7 @@ describe('single-prompt', function() {
     it('returns a promise', function() {
         var promise = prompter.prompt('abc', [1, 2, 3]);
 
-        prompter.fakeKeypress(2);
+        fakeKeypress(2);
 
         expect(typeof promise.then === 'function').toBe(true);
     });
@@ -40,7 +41,7 @@ describe('single-prompt', function() {
     it('resolves the promise with the key pressed', function(done) {
         var promise = prompter.prompt('Yes or no', ['y', 'n']);
 
-        prompter.fakeKeypress('n');
+        fakeKeypress('n');
 
         promise.then(
             function(key) {
@@ -57,9 +58,9 @@ describe('single-prompt', function() {
     it('continues to prompt until one of the expected values is provided', function(done) {
         var promise = prompter.prompt('Yes or no', ['y', 'n']);
 
-        prompter.fakeKeypress('x');
+        fakeKeypress('x');
         setTimeout(function() {
-            prompter.fakeKeypress('n');
+            fakeKeypress('n');
         }, 100);
 
         promise.then(
@@ -78,7 +79,7 @@ describe('single-prompt', function() {
     it('lowercases the input to avoid issues with case', function(done) {
         var promise = prompter.prompt('Yes or no', ['y', 'n']);
 
-        prompter.fakeKeypress('N');
+        fakeKeypress('N');
 
         promise.then(
             function(key) {
@@ -95,7 +96,7 @@ describe('single-prompt', function() {
     it('correctly handles upper case answers', function(done) {
         var promise = prompter.prompt('Yes or no', ['Y', 'N']);
 
-        prompter.fakeKeypress('N');
+        fakeKeypress('N');
 
         promise.then(
             function(key) {
@@ -109,29 +110,6 @@ describe('single-prompt', function() {
         );
     });
 
-    it('provides a fakeKeypress method for ease of testing', function() {
-        spyOn(process.stdin, 'emit');
-
-        prompter.fakeKeypress('x');
-
-        expect(process.stdin.emit.mostRecentCall.args[0]).toBe('keypress');
-        expect(process.stdin.emit.mostRecentCall.args[1]).toBe('x');
-    });
-
-    it('fakeKeypress can also pass key meta data to simulate keypresses like ctrl-c', function() {
-        spyOn(process.stdin, 'emit');
-
-        prompter.fakeKeypress('c', {
-            name: 'c',
-            ctrl: true
-        });
-
-        expect(process.stdin.emit).toHaveBeenCalledWith('keypress', 'c', {
-            name: 'c',
-            ctrl: true
-        });
-    });
-
     it('works for a prompt within a prompt (promise-wise)', function(done) {
         var promise = prompter
             .prompt('Yes or no', ['y', 'n'])
@@ -139,9 +117,9 @@ describe('single-prompt', function() {
                 return prompter.prompt('Number of drinks', [1, 2, 3]);
             });
 
-        prompter.fakeKeypress('n');
+        fakeKeypress('n');
         setTimeout(function() {
-            prompter.fakeKeypress(2);
+            fakeKeypress(2);
         }, 50);
 
         promise.then(
@@ -208,7 +186,7 @@ describe('single-prompt', function() {
         spyOn(process, 'exit');
         var promise = prompter.prompt('Yes or no', ['y', 'n']);
 
-        prompter.fakeKeypress('c', {
+        fakeKeypress('c', {
             name: 'c',
             ctrl: true
         });
