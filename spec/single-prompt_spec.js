@@ -12,11 +12,9 @@ describe('single-prompt', function() {
     });
 
     it('displays the prompt on stdout', function(done) {
-        process.stdin.on.andCallFake(function(event, callback) {
-            callback('n');
-        });
-
         var promise = prompter.prompt('this is a test', ['y', 'n']);
+
+        prompter.fakeKeypress('n');
 
         promise.then(
             function(key) {
@@ -31,21 +29,17 @@ describe('single-prompt', function() {
     });
 
     it('returns a promise', function() {
-        process.stdin.on.andCallFake(function(event, callback) {
-            callback(2);
-        });
-
         var promise = prompter.prompt('abc', [1, 2, 3]);
+
+        prompter.fakeKeypress(2);
 
         expect(typeof promise.then === 'function').toBe(true);
     });
 
     it('resolves the promise with the key pressed', function(done) {
-        process.stdin.on.andCallFake(function(event, callback) {
-            callback('n');
-        });
-
         var promise = prompter.prompt('Yes or no', ['y', 'n']);
+
+        prompter.fakeKeypress('n');
 
         promise.then(
             function(key) {
@@ -62,9 +56,9 @@ describe('single-prompt', function() {
     it('continues to prompt until one of the expected values is provided', function(done) {
         var promise = prompter.prompt('Yes or no', ['y', 'n']);
 
-        process.stdin.emit('keypress', 'x');
+        prompter.fakeKeypress('x');
         setTimeout(function() {
-            process.stdin.emit('keypress', 'n');
+            prompter.fakeKeypress('n');
         }, 100);
 
         promise.then(
@@ -83,7 +77,7 @@ describe('single-prompt', function() {
     it('lowercases the input to avoid issues with case', function(done) {
         var promise = prompter.prompt('Yes or no', ['y', 'n']);
 
-        process.stdin.emit('keypress', 'N');
+        prompter.fakeKeypress('N');
 
         promise.then(
             function(key) {
@@ -95,5 +89,13 @@ describe('single-prompt', function() {
                 done();
             }
         );
+    });
+
+    it('provides a fakeKeypress method for ease of testing', function() {
+        spyOn(process.stdin, 'emit');
+
+        prompter.fakeKeypress('x');
+
+        expect(process.stdin.emit).toHaveBeenCalledWith('keypress', 'x');
     });
 });

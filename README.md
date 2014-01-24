@@ -42,3 +42,24 @@ the type of the provided choices. If the match is an integer, it will
 return an integer so in this example, 2 is of type 'number'. It is
 assumed you won't do something silly like prompt with options like
 `[1, '1']`. It will work just maybe not quite how you want it to.
+
+## Testing
+
+`fakeKeypress` is provided for use in tests. For example:
+
+    it('lowercases the input to avoid issues with case', function(done) {
+        var promise = prompter.prompt('Yes or no', ['y', 'n']);
+
+        prompter.fakeKeypress('N');
+
+        promise.then(
+            function(key) {
+                expect(key).toBe('n');
+                done();
+            },
+            function() {
+                expect('promise').toBe('not rejected');
+                done();
+            }
+        );
+    });

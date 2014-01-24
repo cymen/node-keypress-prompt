@@ -15,7 +15,9 @@ module.exports = {
                     valid,
                     value;
 
-                key = key.toLowerCase();
+                if (typeof key === 'string') {
+                    key = key.toLowerCase();
+                }
 
                 if (choices.indexOf(key) !== -1) {
                     valid = true;
@@ -40,5 +42,9 @@ module.exports = {
 
             process.stdin.setRawMode(true);
         });
+    },
+
+    fakeKeypress: function(key) {
+        process.stdin.emit('keypress', key);
     }
 };
