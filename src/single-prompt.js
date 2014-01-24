@@ -30,10 +30,15 @@ module.exports = {
 
             self.displayPrompt(message, choices);
 
-            var x = process.stdin.on('keypress', function(key) {
+            var x = process.stdin.on('keypress', function(key, keyMeta) {
                 var keyAsInteger = parseInt(key, 10),
                     valid,
                     value;
+
+                if (keyMeta && keyMeta.name === 'c' && keyMeta.ctrl) {
+                    reject(keyMeta);
+                    process.exit(1);
+                }
 
                 if (typeof key === 'string') {
                     key = key.toLowerCase();
@@ -68,7 +73,7 @@ module.exports = {
         });
     },
 
-    fakeKeypress: function(key) {
-        process.stdin.emit('keypress', key);
+    fakeKeypress: function(key, keyMeta) {
+        process.stdin.emit('keypress', key, keyMeta);
     }
 };

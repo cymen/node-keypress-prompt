@@ -46,6 +46,11 @@ return an integer so in this example, 2 is of type 'number'. It is
 assumed you won't do something silly like prompt with options like
 `[1, '1']`. It will work just maybe not quite how you want it to.
 
+## Bailing out
+
+If ctrl-c is press at the prompt, the promise will be rejected and
+`process.exit(1)` will be called.
+
 ## Testing
 
 `fakeKeypress` is provided for use in tests. For example:

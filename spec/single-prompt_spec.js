@@ -114,7 +114,22 @@ describe('single-prompt', function() {
 
         prompter.fakeKeypress('x');
 
-        expect(process.stdin.emit).toHaveBeenCalledWith('keypress', 'x');
+        expect(process.stdin.emit.mostRecentCall.args[0]).toBe('keypress');
+        expect(process.stdin.emit.mostRecentCall.args[1]).toBe('x');
+    });
+
+    it('fakeKeypress can also pass key meta data to simulate keypresses like ctrl-c', function() {
+        spyOn(process.stdin, 'emit');
+
+        prompter.fakeKeypress('c', {
+            name: 'c',
+            ctrl: true
+        });
+
+        expect(process.stdin.emit).toHaveBeenCalledWith('keypress', 'c', {
+            name: 'c',
+            ctrl: true
+        });
     });
 
     it('works for a prompt within a prompt (promise-wise)', function(done) {
@@ -184,6 +199,29 @@ describe('single-prompt', function() {
             },
             function() {
                 expect(console.log).toHaveBeenCalledWith('Answers can only be a single character in length!');
+                done();
+            }
+        );
+    });
+
+    it('exits the program if ctrl-c is press', function(done) {
+        spyOn(process, 'exit');
+        var promise = prompter.prompt('Yes or no', ['y', 'n']);
+
+        prompter.fakeKeypress('c', {
+            name: 'c',
+            ctrl: true
+        });
+
+        promise.then(
+            function() {
+                expect('promise').toBe('not resolved');
+                done();
+            },
+            function(keyMeta) {
+                expect(process.exit).toHaveBeenCalledWith(1);
+                expect(keyMeta.name).toBe('c');
+                expect(keyMeta.ctrl).toBe(true);
                 done();
             }
         );
