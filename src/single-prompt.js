@@ -1,6 +1,6 @@
 var Q = require('q'),
     keypress = require('keypress'),
-    util = require('util');
+    fakeKeypress = require('./fake-keypress');
 
 keypress(process.stdin);
 
@@ -72,5 +72,7 @@ module.exports = {
                 process.stdin.setRawMode(true);
             }
         });
-    }
+    },
+
+    fakeKeypress: fakeKeypress
 };

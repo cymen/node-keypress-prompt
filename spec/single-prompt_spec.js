@@ -1,6 +1,7 @@
 'use strict';
 
 var Q = require('q'),
+    proxyquire = require('proxyquire'),
     fakeKeypress = require('../src/fake-keypress');
 
 describe('single-prompt', function() {
@@ -204,5 +205,20 @@ describe('single-prompt', function() {
                 done();
             }
         );
+    });
+
+    it('provides access to fake keypress', function() {
+        var fakeKeypressSpy = jasmine.createSpy('fakeKeypress'),
+            anotherPrompter = proxyquire('../src/single-prompt', {
+                './fake-keypress': fakeKeypressSpy
+            });
+
+        anotherPrompter.fakeKeypress('a', {
+            x: 'y'
+        });
+
+        expect(fakeKeypressSpy).toHaveBeenCalledWith('a', {
+            x: 'y'
+        });
     });
 });
