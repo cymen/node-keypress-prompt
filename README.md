@@ -50,3 +50,24 @@ assumed you won't do something silly like prompt with options like
 
 If ctrl-c is press at the prompt, the promise will be rejected and
 `process.exit(1)` will be called.
+
+## Testing
+
+`fakeKeypress` is provided for use in tests. For example:
+
+    it('lowercases the input to avoid issues with case', function(done) {
+        var promise = prompter.prompt('Yes or no', ['y', 'n']);
+
+        prompter.fakeKeypress('N');
+
+        promise.then(
+            function(key) {
+                expect(key).toBe('n');
+                done();
+            },
+            function() {
+                expect('promise').toBe('not rejected');
+                done();
+            }
+        );
+    });
