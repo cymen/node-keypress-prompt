@@ -7,6 +7,7 @@ describe('single-prompt', function() {
 
     beforeEach(function() {
         prompter = require('../src/single-prompt');
+        spyOn(console, 'log').andCallThrough();
         spyOn(process.stdout, 'write').andCallThrough();
         spyOn(process.stdin, 'on').andCallThrough();
     });
@@ -91,6 +92,23 @@ describe('single-prompt', function() {
         );
     });
 
+    it('correctly handles upper case answers', function(done) {
+        var promise = prompter.prompt('Yes or no', ['Y', 'N']);
+
+        prompter.fakeKeypress('N');
+
+        promise.then(
+            function(key) {
+                expect(key).toBe('n');
+                done();
+            },
+            function() {
+                expect('promise').toBe('not rejected');
+                done();
+            }
+        );
+    });
+
     it('provides a fakeKeypress method for ease of testing', function() {
         spyOn(process.stdin, 'emit');
 
@@ -118,6 +136,54 @@ describe('single-prompt', function() {
             },
             function() {
                 expect('promise').toBe('not rejected');
+                done();
+            }
+        );
+    });
+
+    it('logs an error and exits if attempting to use answers longer than a single character', function(done) {
+        var promise = prompter
+            .prompt('Yes or no', ['yes', 'n']);
+
+        promise.then(
+            function(key) {
+                expect('promise').toBe('not resolved');
+                done();
+            },
+            function() {
+                expect(console.log).toHaveBeenCalledWith('Answers can only be a single character in length!');
+                done();
+            }
+        );
+    });
+
+    it('logs an error and exists if attempting to use answer with number greater than 9', function(done) {
+        var promise = prompter
+            .prompt('Number of drinks', [1, 3, 25]);
+
+        promise.then(
+            function(key) {
+                expect('promise').toBe('not resolved');
+                done();
+            },
+            function() {
+                expect(console.log).toHaveBeenCalledWith('Answers can only be a single character in length!');
+                done();
+            }
+        );
+    });
+
+    it('logs an error and exists if attempting to use answer with number less than 0', function(done) {
+        var promise = prompter
+            .prompt('Number of drinks', [1, 3, 25, -5]);
+
+        promise.then(
+            function(key) {
+                expect('promise').toBe('not resolved');
+                done();
+            },
+            function() {
+                expect(console.log).toHaveBeenCalledWith('Answers can only be a single character in length!');
                 done();
             }
         );

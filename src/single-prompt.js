@@ -5,10 +5,31 @@ var Q = require('q'),
 keypress(process.stdin);
 
 module.exports = {
-    prompt: function(message, choices) {
+    displayPrompt: function(message, choices) {
         process.stdout.write(message + ' [' + choices.join(', ') + ']: ');
+    },
 
-        return Q.promise(function(resolve) {
+    displayInvalidChoice: function(key) {
+        console.log(key + ' is not a valid choice, please try again');
+    },
+
+    prompt: function(message, choices) {
+        var self = this;
+        var lowerCaseChoices = choices.map(function(option) {
+            return (option.toLowerCase) ? option.toLowerCase() : option;
+        });
+
+        return Q.promise(function(resolve, reject) {
+            lowerCaseChoices.forEach(function(option) {
+                if (option.toString().length > 1) {
+                    var error = 'Answers can only be a single character in length!';
+                    console.log(error);
+                    reject(error);
+                }
+            });
+
+            self.displayPrompt(message, choices);
+
             var x = process.stdin.on('keypress', function(key) {
                 var keyAsInteger = parseInt(key, 10),
                     valid,
@@ -18,10 +39,10 @@ module.exports = {
                     key = key.toLowerCase();
                 }
 
-                if (choices.indexOf(key) !== -1) {
+                if (lowerCaseChoices.indexOf(key) !== -1) {
                     valid = true;
                     value = key;
-                } else if (choices.indexOf(keyAsInteger) !== -1) {
+                } else if (lowerCaseChoices.indexOf(keyAsInteger) !== -1) {
                     valid = true;
                     value = keyAsInteger;
                 } else {
@@ -36,8 +57,8 @@ module.exports = {
                     process.stdin.removeListener('keypress', arguments.callee);
                     resolve(value);
                 } else {
-                    process.stdout.write(key + ' is not a valid choice, please try again\n');
-                    process.stdout.write(message + ' [' + choices.join(', ') + ']: ');
+                    self.displayInvalidChoice(key);
+                    self.displayPrompt(message, choices);
                 }
             });
 
