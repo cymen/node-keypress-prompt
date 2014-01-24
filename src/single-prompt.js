@@ -32,7 +32,9 @@ module.exports = {
                 if (valid) {
                     process.stdout.write(key + '\n');
                     process.stdin.pause();
-                    process.stdin.setRawMode(false);
+                    if (process.stdin.setRawMode) {
+                        process.stdin.setRawMode(false);
+                    }
                     resolve(value);
                 } else {
                     process.stdout.write(key + ' is not a valid choice, please try again\n');
@@ -40,7 +42,9 @@ module.exports = {
                 }
             });
 
-            process.stdin.setRawMode(true);
+            if (process.stdin.setRawMode) {
+                process.stdin.setRawMode(true);
+            }
         });
     },
 
