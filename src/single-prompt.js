@@ -36,6 +36,7 @@ module.exports = {
                     value;
 
                 if (keyMeta && keyMeta.name === 'c' && keyMeta.ctrl) {
+                    console.log();
                     reject(keyMeta);
                     process.exit(1);
                 }
