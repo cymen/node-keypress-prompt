@@ -3,13 +3,13 @@
 var Q = require('q'),
     keypress = require('keypress');
 
+keypress(process.stdin);
+
 module.exports = {
     prompt: function(message, choices) {
         process.stdout.write(message + ' [' + choices.join(', ') + ']: ');
 
         return Q.promise(function(resolve) {
-            keypress(process.stdin);
-
             process.stdin.on('keypress', function(key) {
                 var keyAsInteger = parseInt(key, 10),
                     valid,
@@ -31,7 +31,6 @@ module.exports = {
 
                 if (valid) {
                     process.stdout.write(key + '\n');
-                    process.stdin.pause();
                     if (process.stdin.setRawMode) {
                         process.stdin.setRawMode(false);
                     }

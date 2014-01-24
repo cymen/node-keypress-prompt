@@ -98,4 +98,28 @@ describe('single-prompt', function() {
 
         expect(process.stdin.emit).toHaveBeenCalledWith('keypress', 'x');
     });
+
+    it('works for a prompt within a prompt (promise-wise)', function(done) {
+        var promise = prompter
+            .prompt('Yes or no', ['y', 'n'])
+            .then(function() {
+                return prompter.prompt('Number of drinks', [1, 2, 3]);
+            });
+
+        prompter.fakeKeypress('n');
+        setTimeout(function() {
+            prompter.fakeKeypress(2);
+        }, 50);
+
+        promise.then(
+            function(key) {
+                expect(key).toBe(2);
+                done();
+            },
+            function() {
+                expect('promise').toBe('not rejected');
+                done();
+            }
+        );
+    });
 });
