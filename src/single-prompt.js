@@ -1,7 +1,6 @@
-'use strict';
-
 var Q = require('q'),
-    keypress = require('keypress');
+    keypress = require('keypress'),
+    util = require('util');
 
 keypress(process.stdin);
 
@@ -10,7 +9,7 @@ module.exports = {
         process.stdout.write(message + ' [' + choices.join(', ') + ']: ');
 
         return Q.promise(function(resolve) {
-            process.stdin.on('keypress', function(key) {
+            var x = process.stdin.on('keypress', function(key) {
                 var keyAsInteger = parseInt(key, 10),
                     valid,
                     value;
@@ -34,6 +33,7 @@ module.exports = {
                     if (process.stdin.setRawMode) {
                         process.stdin.setRawMode(false);
                     }
+                    process.stdin.removeListener('keypress', arguments.callee);
                     resolve(value);
                 } else {
                     process.stdout.write(key + ' is not a valid choice, please try again\n');
