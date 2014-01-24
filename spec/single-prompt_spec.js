@@ -219,6 +219,7 @@ describe('single-prompt', function() {
                 done();
             },
             function(keyMeta) {
+                expect(console.log).toHaveBeenCalledWith();
                 expect(process.exit).toHaveBeenCalledWith(1);
                 expect(keyMeta.name).toBe('c');
                 expect(keyMeta.ctrl).toBe(true);
