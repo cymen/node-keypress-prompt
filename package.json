@@ -15,7 +15,8 @@
         "grunt-contrib-jshint": "0.6.4",
         "grunt-jasmine-node": "0.1.0",
         "grunt-jsbeautifier": "0.2.2",
-        "proxyquire": "0.5.2"
+        "proxyquire": "0.5.2",
+        "promise-matchers": "0.9.5"
     },
     "licenses": [{
         "type": "MIT",
