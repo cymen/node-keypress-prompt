@@ -72,3 +72,11 @@ If Ctrl-C is press at the prompt, the promise will be rejected.
             }
         );
     });
+
+To send Ctrl-C:
+
+    fakeKeypress('c', {
+        name: 'c',
+        ctrl: true
+    });
+
