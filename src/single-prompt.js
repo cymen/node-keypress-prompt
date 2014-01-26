@@ -41,7 +41,7 @@ module.exports = {
 
             var handleKeypress = function(key, keyMeta) {
                 var keyAsInteger = parseInt(key, 10),
-                    keyAsLowerCase = (key.toLowerCase) ? key.toLowerCase() : key,
+                    keyAsLowerCase = (key && key.toLowerCase) ? key.toLowerCase() : key,
                     valid,
                     value;
 
