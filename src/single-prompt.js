@@ -4,50 +4,58 @@ var Q = require('q'),
 
 keypress(process.stdin);
 
-module.exports = {
-    displayPrompt: function(message, choices) {
-        process.stdout.write(message + ' [' + choices.join(', ') + ']: ');
-    },
+var displayPrompt = function(message, choices) {
+    process.stdout.write(message + ' [' + choices.join(', ') + ']: ');
+};
 
-    displayInvalidChoice: function(key) {
-        console.log(key + ' is not a valid choice, please try again');
-    },
+var displayInvalidChoice = function(key) {
+    console.log(key + ' is not a valid choice, please try again');
+};
+
+var validChoices = function(allChoices) {
+    var valid = true;
+    allChoices.forEach(function(choice) {
+        if (choice.toString().length > 1) {
+            valid = false;
+        }
+    });
+    return valid;
+};
+
+module.exports = {
+    fakeKeypress: fakeKeypress,
 
     prompt: function(message, choices) {
-        var self = this;
         var lowerCaseChoices = choices.map(function(option) {
             return (option.toLowerCase) ? option.toLowerCase() : option;
         });
 
         return Q.promise(function(resolve, reject) {
-            lowerCaseChoices.forEach(function(option) {
-                if (option.toString().length > 1) {
-                    var error = 'Answers can only be a single character in length!';
-                    console.log(error);
-                    reject(error);
-                }
-            });
+            if (!validChoices(lowerCaseChoices)) {
+                var error = 'Answers can only be a single character in length!';
+                console.log(error);
+                reject(error);
+            }
 
-            self.displayPrompt(message, choices);
+            displayPrompt(message, choices);
 
-            var x = process.stdin.on('keypress', function(key, keyMeta) {
+            var handleKeypress = function(key, keyMeta) {
                 var keyAsInteger = parseInt(key, 10),
+                    keyAsLowerCase = (key.toLowerCase) ? key.toLowerCase() : key,
                     valid,
                     value;
 
                 if (keyMeta && keyMeta.name === 'c' && keyMeta.ctrl) {
                     console.log();
+                    if (process.stdin.setRawMode) {
+                        process.stdin.setRawMode(false);
+                    }
                     reject(keyMeta);
-                    process.exit(1);
                 }
 
-                if (typeof key === 'string') {
-                    key = key.toLowerCase();
-                }
-
-                if (lowerCaseChoices.indexOf(key) !== -1) {
+                if (lowerCaseChoices.indexOf(keyAsLowerCase) !== -1) {
                     valid = true;
-                    value = key;
+                    value = keyAsLowerCase;
                 } else if (lowerCaseChoices.indexOf(keyAsInteger) !== -1) {
                     valid = true;
                     value = keyAsInteger;
@@ -60,19 +68,16 @@ module.exports = {
                     if (process.stdin.setRawMode) {
                         process.stdin.setRawMode(false);
                     }
-                    process.stdin.removeListener('keypress', arguments.callee);
+                    process.stdin.removeListener('keypress', handleKeypress);
                     resolve(value);
-                } else {
-                    self.displayInvalidChoice(key);
-                    self.displayPrompt(message, choices);
                 }
-            });
+            };
+
+            process.stdin.on('keypress', handleKeypress);
 
             if (process.stdin.setRawMode) {
                 process.stdin.setRawMode(true);
             }
         });
-    },
-
-    fakeKeypress: fakeKeypress
+    }
 };

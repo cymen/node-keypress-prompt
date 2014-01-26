@@ -56,7 +56,7 @@ describe('single-prompt', function() {
         );
     });
 
-    it('continues to prompt until one of the expected values is provided', function(done) {
+    it('it ignores invalid key presses', function(done) {
         var promise = prompter.prompt('Yes or no', ['y', 'n']);
 
         fakeKeypress('x');
@@ -67,7 +67,6 @@ describe('single-prompt', function() {
         promise.then(
             function(key) {
                 expect(key).toBe('n');
-                expect(process.stdout.write).toHaveBeenCalledWith('x is not a valid choice, please try again\n');
                 done();
             },
             function() {
@@ -111,6 +110,23 @@ describe('single-prompt', function() {
         );
     });
 
+    it('displays the key as pressed in terms of case', function(done) {
+        var promise = prompter.prompt('Yes or no', ['y', 'n']);
+
+        fakeKeypress('N');
+
+        promise.then(
+            function(key) {
+                expect(process.stdout.write).toHaveBeenCalledWith('N\n');
+                done();
+            },
+            function() {
+                expect('promise').toBe('not rejected');
+                done();
+            }
+        );
+    });
+
     it('works for a prompt within a prompt (promise-wise)', function(done) {
         var promise = prompter
             .prompt('Yes or no', ['y', 'n'])
@@ -135,7 +151,7 @@ describe('single-prompt', function() {
         );
     });
 
-    it('logs an error and exits if attempting to use answers longer than a single character', function(done) {
+    it('logs an error and rejects if attempting to use answers longer than a single character', function(done) {
         var promise = prompter
             .prompt('Yes or no', ['yes', 'n']);
 
@@ -151,7 +167,7 @@ describe('single-prompt', function() {
         );
     });
 
-    it('logs an error and exists if attempting to use answer with number greater than 9', function(done) {
+    it('logs an error rejects if attempting to use answer with number greater than 9', function(done) {
         var promise = prompter
             .prompt('Number of drinks', [1, 3, 25]);
 
@@ -167,7 +183,7 @@ describe('single-prompt', function() {
         );
     });
 
-    it('logs an error and exists if attempting to use answer with number less than 0', function(done) {
+    it('logs an error and rejects if attempting to use answer with number less than 0', function(done) {
         var promise = prompter
             .prompt('Number of drinks', [1, 3, 25, -5]);
 
@@ -183,8 +199,7 @@ describe('single-prompt', function() {
         );
     });
 
-    it('exits the program if ctrl-c is press', function(done) {
-        spyOn(process, 'exit');
+    it('rejects the promise if Ctrl-C is pressed', function(done) {
         var promise = prompter.prompt('Yes or no', ['y', 'n']);
 
         fakeKeypress('c', {
@@ -199,7 +214,6 @@ describe('single-prompt', function() {
             },
             function(keyMeta) {
                 expect(console.log).toHaveBeenCalledWith();
-                expect(process.exit).toHaveBeenCalledWith(1);
                 expect(keyMeta.name).toBe('c');
                 expect(keyMeta.ctrl).toBe(true);
                 done();

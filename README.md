@@ -2,12 +2,15 @@
 
 [![NPM](https://nodei.co/npm/single-prompt.png?downloads=true&stars=true)](https://npmjs.org/package/single-prompt)
 
-`single-prompt` is a simple prompter to get a single character or digit input
-from the user on the console. It repeats the prompt until a valid input is
-made. It automatically lowercases the answer to avoid any issue with case. It
-also only needs the keypress which means enter does not need to be pressed
-after the answer key is pressed (however, it also means there is a limit of
-a single character for an answer).
+`single-prompt` is a simple prompter to get a single character or digit
+on the console:
+
+* returns a promise
+* automatically lowercases the answer to avoid any issue with case
+* trigged on a single keypress (no need to press enter)
+* limited to single character choices
+* does work with numeric choices and attempts to coerce input to choice type
+* rejects promise if ctrl-c is pressed
 
 ## Example of prompting for a character
 
@@ -21,7 +24,6 @@ a single character for an answer).
       });
 
     $ node character.js
-    Are you crazy [y, n]: a is not a valid choice, please try again
     Are you crazy [y, n]: n
     choice n
 
@@ -48,8 +50,7 @@ assumed you won't do something silly like prompt with options like
 
 ## Bailing out
 
-If ctrl-c is press at the prompt, the promise will be rejected and
-`process.exit(1)` will be called.
+If Ctrl-C is press at the prompt, the promise will be rejected.
 
 ## Testing
 
