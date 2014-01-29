@@ -1,4 +1,4 @@
-var prompter = require('./src/single-prompt');
+var prompter = require('./src/keypress-prompt');
 
 prompter
   .prompt('Are you crazy', ['y', 'n'])

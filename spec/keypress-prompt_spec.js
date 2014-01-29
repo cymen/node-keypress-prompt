@@ -5,11 +5,11 @@ var Q = require('q'),
     proxyquire = require('proxyquire'),
     fakeKeypress = require('../src/fake-keypress');
 
-describe('single-prompt', function() {
+describe('keypress-prompt', function() {
     var prompter;
 
     beforeEach(function() {
-        prompter = require('../src/single-prompt');
+        prompter = require('../src/keypress-prompt');
         spyOn(console, 'log').andCallThrough();
         spyOn(process.stdout, 'write').andCallThrough();
         spyOn(process.stdin, 'on').andCallThrough();
@@ -147,7 +147,7 @@ describe('single-prompt', function() {
 
     it('provides access to fake keypress', function() {
         var fakeKeypressSpy = jasmine.createSpy('fakeKeypress'),
-            anotherPrompter = proxyquire('../src/single-prompt', {
+            anotherPrompter = proxyquire('../src/keypress-prompt', {
                 './fake-keypress': fakeKeypressSpy
             });
 

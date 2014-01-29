@@ -1,8 +1,8 @@
 {
-    "name": "single-prompt",
-    "description": "prompt for a single character or digit",
-    "version": "0.2.2",
-    "main": "src/single-prompt.js",
+    "name": "keypress-prompt",
+    "description": "prompts with a single keypress response",
+    "version": "0.3.0",
+    "main": "src/keypress-prompt.js",
     "dependencies": {
         "keypress": "0.2.1",
         "q": "1.0.0"
@@ -20,11 +20,11 @@
     },
     "licenses": [{
         "type": "MIT",
-        "url": "https://github.com/cymen/node-single-prompt/blob/master/LICENSE"
+        "url": "https://github.com/cymen/node-keypress-prompt/blob/master/LICENSE"
     }],
     "repository": {
         "type": "git",
-        "url": "https://github.com/cymen/node-single-prompt"
+        "url": "https://github.com/cymen/node-keypress-prompt"
     },
     "scripts": {
         "test": "jasmine-node --forceexit spec"

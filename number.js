@@ -1,4 +1,4 @@
-var prompter = require('./src/single-prompt');
+var prompter = require('./src/keypress-prompt');
 
 prompter
   .prompt('Number of diners', [1, 2, 3, 4, 5])

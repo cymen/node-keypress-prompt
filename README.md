@@ -1,8 +1,8 @@
-# single-prompt [![Build Status](https://travis-ci.org/cymen/node-single-prompt.png?branch=master)](https://travis-ci.org/cymen/node-single-prompt)
+# keypress-prompt [![Build Status](https://travis-ci.org/cymen/node-keypress-prompt.png?branch=master)](https://travis-ci.org/cymen/node-keypress-prompt)
 
-[![NPM](https://nodei.co/npm/single-prompt.png?downloads=true&stars=true)](https://npmjs.org/package/single-prompt)
+[![NPM](https://nodei.co/npm/keypress-prompt.png?downloads=true&stars=true)](https://npmjs.org/package/keypress-prompt)
 
-`single-prompt` is a simple prompter to get a single character or digit
+`keypress-prompt` is a simple prompter to get a single character or digit
 on the console:
 
 * returns a promise
@@ -15,7 +15,7 @@ on the console:
 ## Example of prompting for a character
 
     $ cat character.js
-    var prompter = require('single-prompt');
+    var prompter = require('keypress-prompt');
 
     prompter
       .prompt('Are you crazy', ['y', 'n'])
@@ -30,7 +30,7 @@ on the console:
 ## Example of prompting for a number
 
     $ cat number.js
-    var prompter = require('./src/single-prompt');
+    var prompter = require('./src/keypress-prompt');
 
     prompter
       .prompt('Number of diners', [1, 2, 3, 4, 5])
@@ -42,7 +42,7 @@ on the console:
     Number of diners [1, 2, 3, 4, 5]: 2
     choice 2
 
-Note that internally `single-prompt` attempts to coerce the input to
+Note that internally `keypress-prompt` attempts to coerce the input to
 the type of the provided choices. If the match is an integer, it will
 return an integer so in this example, 2 is of type 'number'. It is
 assumed you won't do something silly like prompt with options like
