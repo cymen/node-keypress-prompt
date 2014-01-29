@@ -1,7 +1,7 @@
 {
     "name": "keypress-prompt",
     "description": "prompts with a single keypress response",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "main": "src/keypress-prompt.js",
     "dependencies": {
         "keypress": "0.2.1",

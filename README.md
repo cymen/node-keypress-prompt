@@ -30,7 +30,7 @@ on the console:
 ## Example of prompting for a number
 
     $ cat number.js
-    var prompter = require('./src/keypress-prompt');
+    var prompter = require('keypress-prompt');
 
     prompter
       .prompt('Number of diners', [1, 2, 3, 4, 5])
