@@ -7,7 +7,7 @@ on the console:
 
 * returns a promise
 * automatically lowercases the answer to avoid any issue with case
-* trigged on a single keypress (no need to press enter)
+* triggered on a single keypress (no need to press enter)
 * limited to single character choices
 * does work with numeric choices and attempts to coerce input to choice type
 * rejects promise if ctrl-c is pressed
